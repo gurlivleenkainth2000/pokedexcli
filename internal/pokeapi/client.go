@@ -1,6 +1,7 @@
 package pokeapi
 
 import (
+	"io"
 	"net/http"
 	"time"
 
@@ -24,4 +25,31 @@ func NewClient(timeout, cacheInterval time.Duration) Client {
 			Timeout: timeout,
 		},
 	}
+}
+
+// getResource returns the raw response body for url, serving from the cache
+// when available and caching fresh responses.
+func (c *Client) getResource(url string) ([]byte, error) {
+	if cached, ok := c.cache.Get(url); ok {
+		return cached, nil
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	c.cache.Add(url, body)
+	return body, nil
 }

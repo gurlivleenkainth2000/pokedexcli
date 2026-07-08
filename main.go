@@ -26,12 +26,13 @@ func main() {
 			continue
 		}
 		commandName := words[0]
+		args := words[1:]
 		command, ok := commands[commandName]
 		if !ok {
 			fmt.Println("Unknown command")
 			continue
 		}
-		if err := command.callback(cfg); err != nil {
+		if err := command.callback(cfg, args...); err != nil {
 			fmt.Println(err)
 		}
 	}
