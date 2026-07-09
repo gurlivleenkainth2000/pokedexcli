@@ -96,3 +96,63 @@ func TestListLocationAreasInvalidJSON(t *testing.T) {
 		t.Error("expected an error for malformed JSON, got nil")
 	}
 }
+
+func TestListLocationAreasNilPageUsesBaseURL(t *testing.T) {
+	var gotPath string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		w.Write([]byte(testResponse))
+	}))
+	defer server.Close()
+
+	client := NewClient(5*time.Second, 5*time.Minute)
+	client.baseURL = server.URL
+
+	resp, err := client.ListLocationAreas(nil)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if gotPath != "/location-area" {
+		t.Errorf("request path = %q, want /location-area", gotPath)
+	}
+	if len(resp.Results) != 2 {
+		t.Errorf("len(Results) = %d, want 2", len(resp.Results))
+	}
+}
+
+const locationAreaResponse = `{
+	"name": "pastoria-city-area",
+	"pokemon_encounters": [
+		{"pokemon": {"name": "tentacool", "url": "https://pokeapi.co/api/v2/pokemon/72/"}},
+		{"pokemon": {"name": "magikarp", "url": "https://pokeapi.co/api/v2/pokemon/129/"}}
+	]
+}`
+
+func TestGetLocationAreaParsesEncounters(t *testing.T) {
+	var gotPath string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		w.Write([]byte(locationAreaResponse))
+	}))
+	defer server.Close()
+
+	client := NewClient(5*time.Second, 5*time.Minute)
+	client.baseURL = server.URL
+
+	area, err := client.GetLocationArea("pastoria-city-area")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if gotPath != "/location-area/pastoria-city-area" {
+		t.Errorf("request path = %q, want /location-area/pastoria-city-area", gotPath)
+	}
+	if area.Name != "pastoria-city-area" {
+		t.Errorf("Name = %q, want pastoria-city-area", area.Name)
+	}
+	if len(area.PokemonEncounters) != 2 {
+		t.Fatalf("len(PokemonEncounters) = %d, want 2", len(area.PokemonEncounters))
+	}
+	if area.PokemonEncounters[0].Pokemon.Name != "tentacool" {
+		t.Errorf("PokemonEncounters[0] = %q, want tentacool", area.PokemonEncounters[0].Pokemon.Name)
+	}
+}

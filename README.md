@@ -85,16 +85,17 @@ Your Pokedex:
 
 ```
 .
-├── main.go                REPL loop and config setup
-├── commands.go            command registry, config, help/exit
-├── command_map.go         map / mapb
-├── command_explore.go     explore
-├── command_catch.go       catch
-├── command_inspect.go     inspect
-├── command_pokedex.go     pokedex
-├── repl.go                input cleaning
-├── repl_test.go
+├── main.go                entry point: builds config, starts the REPL
 └── internal/
+    ├── command/           REPL loop, config, command registry, and commands
+    │   ├── config.go          Config + NewConfig
+    │   ├── commands.go        registry, help/exit
+    │   ├── repl.go            StartREPL loop + cleanInput
+    │   ├── command_map.go     map / mapb
+    │   ├── command_explore.go explore
+    │   ├── command_catch.go   catch
+    │   ├── command_inspect.go inspect
+    │   └── command_pokedex.go pokedex
     ├── pokeapi/           PokeAPI client (location areas, Pokémon) + tests
     └── pokecache/         thread-safe, self-reaping cache + tests
 ```

@@ -1,11 +1,11 @@
-package main
+package command
 
 import (
 	"errors"
 	"fmt"
 )
 
-func commandExplore(cfg *config, args ...string) error {
+func commandExplore(cfg *Config, args ...string) error {
 	if len(args) != 1 {
 		return errors.New("explore requires a location area name: explore <area_name>")
 	}

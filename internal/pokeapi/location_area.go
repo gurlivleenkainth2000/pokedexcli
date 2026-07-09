@@ -29,7 +29,7 @@ type LocationArea struct {
 // ListLocationAreas fetches a page of location areas. If pageURL is nil, it
 // fetches the first page from the default endpoint.
 func (c *Client) ListLocationAreas(pageURL *string) (LocationAreasResp, error) {
-	url := baseURL + "/location-area"
+	url := c.baseURL + "/location-area"
 	if pageURL != nil {
 		url = *pageURL
 	}
@@ -50,7 +50,7 @@ func (c *Client) ListLocationAreas(pageURL *string) (LocationAreasResp, error) {
 // GetLocationArea fetches the details (including Pokemon encounters) for a
 // single location area by name.
 func (c *Client) GetLocationArea(name string) (LocationArea, error) {
-	url := baseURL + "/location-area/" + name
+	url := c.baseURL + "/location-area/" + name
 
 	body, err := c.getResource(url)
 	if err != nil {

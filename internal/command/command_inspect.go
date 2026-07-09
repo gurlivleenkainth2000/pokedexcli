@@ -1,11 +1,11 @@
-package main
+package command
 
 import (
 	"errors"
 	"fmt"
 )
 
-func commandInspect(cfg *config, args ...string) error {
+func commandInspect(cfg *Config, args ...string) error {
 	if len(args) != 1 {
 		return errors.New("inspect requires a pokemon name: inspect <pokemon_name>")
 	}

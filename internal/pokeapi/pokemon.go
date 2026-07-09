@@ -23,7 +23,7 @@ type Pokemon struct {
 
 // GetPokemon fetches details for a single Pokemon by name.
 func (c *Client) GetPokemon(name string) (Pokemon, error) {
-	url := baseURL + "/pokemon/" + name
+	url := c.baseURL + "/pokemon/" + name
 
 	body, err := c.getResource(url)
 	if err != nil {

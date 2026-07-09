@@ -1,24 +1,14 @@
-package main
+package command
 
 import (
 	"fmt"
 	"os"
-
-	"github.com/gurlivleenkainth2000/pokedexcli/internal/pokeapi"
 )
-
-// config holds shared state passed to every command callback.
-type config struct {
-	pokeapiClient    pokeapi.Client
-	nextLocationsURL *string
-	prevLocationsURL *string
-	pokedex          map[string]pokeapi.Pokemon
-}
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config, ...string) error
+	callback    func(*Config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -66,13 +56,13 @@ func getCommands() map[string]cliCommand {
 	}
 }
 
-func commandExit(cfg *config, args ...string) error {
+func commandExit(cfg *Config, args ...string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(cfg *config, args ...string) error {
+func commandHelp(cfg *Config, args ...string) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()

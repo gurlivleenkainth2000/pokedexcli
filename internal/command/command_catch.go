@@ -1,4 +1,4 @@
-package main
+package command
 
 import (
 	"errors"
@@ -11,7 +11,7 @@ import (
 // means a lower catch chance.
 const catchThreshold = 50
 
-func commandCatch(cfg *config, args ...string) error {
+func commandCatch(cfg *Config, args ...string) error {
 	if len(args) != 1 {
 		return errors.New("catch requires a pokemon name: catch <pokemon_name>")
 	}

@@ -8,10 +8,11 @@ import (
 	"github.com/gurlivleenkainth2000/pokedexcli/internal/pokecache"
 )
 
-const baseURL = "https://pokeapi.co/api/v2"
+const defaultBaseURL = "https://pokeapi.co/api/v2"
 
 // Client is a PokeAPI HTTP client with a response cache.
 type Client struct {
+	baseURL    string
 	cache      *pokecache.Cache
 	httpClient http.Client
 }
@@ -20,7 +21,8 @@ type Client struct {
 // cacheInterval controls how long cached responses live before being reaped.
 func NewClient(timeout, cacheInterval time.Duration) Client {
 	return Client{
-		cache: pokecache.NewCache(cacheInterval),
+		baseURL: defaultBaseURL,
+		cache:   pokecache.NewCache(cacheInterval),
 		httpClient: http.Client{
 			Timeout: timeout,
 		},
