@@ -12,6 +12,7 @@ import (
 func main() {
 	cfg := &config{
 		pokeapiClient: pokeapi.NewClient(5*time.Second, 5*time.Minute),
+		pokedex:       map[string]pokeapi.Pokemon{},
 	}
 
 	scanner := bufio.NewScanner(os.Stdin)
